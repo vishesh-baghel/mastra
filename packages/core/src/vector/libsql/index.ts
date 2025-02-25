@@ -282,6 +282,23 @@ export class LibSQLVector extends MastraVector {
     }
   }
 
+  async updateIndexById(
+    indexName: string,
+    id: string,
+    update: { vector?: number[]; metadata?: Record<string, any> },
+  ): Promise<void> {}
+
+  async deleteIndexById(indexName: string, id: string): Promise<void> {
+    try {
+      await this.turso.execute({
+        sql: `DELETE FROM ${indexName} WHERE vector_id = ?`,
+        args: [id],
+      });
+    } catch (error: any) {
+      throw new Error(`Failed to delete index by id: ${id} for index: ${indexName}: ${error.message}`);
+    }
+  }
+
   async truncateIndex(indexName: string) {
     await this.turso.execute({
       sql: `DELETE FROM ${indexName}`,

@@ -156,6 +156,19 @@ describe('DefaultVectorDB', () => {
         const vectors = [[1, 2, 3, 4]]; // 4D vector for 3D index
         await expect(vectorDB.upsert({ indexName: testIndexName, vectors })).rejects.toThrow();
       });
+
+      it('should should delete the vector by id', async () => {
+        const vectors = [
+          [1, 2, 3],
+          [4, 5, 6],
+        ];
+        const ids = await vectorDB.upsert(testIndexName, vectors);
+        console.log(ids);
+        await vectorDB.deleteIndexById(testIndexName, ids[0]);
+
+        const results = await vectorDB.query(testIndexName, [1, 2, 3]);
+        console.log(results);
+      });
     });
 
     describe('Basic Query Operations', () => {
