@@ -45,4 +45,12 @@ export abstract class MastraVector extends MastraBase {
   abstract describeIndex(indexName: string): Promise<IndexStats>;
 
   abstract deleteIndex(indexName: string): Promise<void>;
+
+  abstract updateIndexById(
+    indexName: string,
+    id: string,
+    update: { vector?: number[]; metadata?: Record<string, any> },
+  ): Promise<void>;
+
+  abstract deleteIndexById(indexName: string, id: string): Promise<void>;
 }
