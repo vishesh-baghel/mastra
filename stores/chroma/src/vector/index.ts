@@ -9,9 +9,11 @@ import type {
   QueryVectorArgs,
   UpsertVectorArgs,
 } from '@mastra/core/vector';
-import { ChromaClient, Collection, type UpdateRecordsParams } from 'chromadb';
 
+import { ChromaClient, Collection } from 'chromadb';
 import { ChromaFilterTranslator } from './filter';
+
+import type { UpdateRecordsParams } from 'chromadb';
 import type { VectorFilter } from '@mastra/core/vector/filter';
 
 interface ChromaUpsertVectorParams extends UpsertVectorParams {
