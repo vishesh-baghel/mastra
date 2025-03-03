@@ -9,6 +9,8 @@ import type {
   BaseLogMessage,
   OutputType,
 } from '@mastra/core';
+
+import type { AgentGenerateOptions, AgentStreamOptions } from '@mastra/core/agent';
 import type { JSONSchema7 } from 'json-schema';
 import { ZodSchema } from 'zod';
 
@@ -40,21 +42,13 @@ export interface GetAgentResponse {
   modelId: string;
 }
 
-export interface GenerateParams<T extends JSONSchema7 | ZodSchema | undefined = undefined> {
+export type GenerateParams<T extends JSONSchema7 | ZodSchema | undefined = undefined> = {
   messages: string | string[] | CoreMessage[];
-  threadId?: string;
-  resourceid?: string;
-  output?: OutputType | T;
-  runId?: string;
-}
+} & Partial<AgentGenerateOptions<T>>;
 
-export interface StreamParams<T extends JSONSchema7 | ZodSchema | undefined = undefined> {
+export type StreamParams<T extends JSONSchema7 | ZodSchema | undefined = undefined> = {
   messages: string | string[] | CoreMessage[];
-  threadId?: string;
-  resourceid?: string;
-  output?: OutputType | T;
-  runId?: string;
-}
+} & Partial<AgentStreamOptions<T>>;
 
 export interface GetEvalsByAgentIdResponse extends GetAgentResponse {
   evals: any[];
@@ -74,6 +68,26 @@ export interface GetWorkflowResponse {
   stepGraph: StepGraph;
   stepSubscriberGraph: Record<string, StepGraph>;
 }
+
+export type GetWorkflowWatchResponse = {
+  activePaths: Array<{
+    stepId: string;
+    stepPath: string[];
+    status: 'completed' | 'suspended' | 'pending';
+  }>;
+  context: {
+    steps: Record<
+      string,
+      {
+        status: 'completed' | 'suspended' | 'running';
+        [key: string]: any;
+      }
+    >;
+  };
+  timestamp: number;
+  suspendedSteps: Record<string, any>;
+  runId: string;
+};
 
 export interface UpsertVectorParams {
   indexName: string;
